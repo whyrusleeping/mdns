@@ -81,6 +81,12 @@ func NewServer(config *Config) (*Server, error) {
 	return s, nil
 }
 
+func (s *Server) getIsShutdown() bool {
+	s.shutdownLock.Lock()
+	defer s.shutdownLock.Unlock()
+	return s.shutdown
+}
+
 // Shutdown is used to shutdown the listener
 func (s *Server) Shutdown() error {
 	s.shutdownLock.Lock()
@@ -107,7 +113,7 @@ func (s *Server) recv(c *net.UDPConn) {
 		return
 	}
 	buf := make([]byte, 65536)
-	for !s.shutdown {
+	for !s.getIsShutdown() {
 		n, from, err := c.ReadFrom(buf)
 		if err != nil {
 			continue

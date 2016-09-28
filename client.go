@@ -148,6 +148,12 @@ func newClient() (*client, error) {
 	return c, nil
 }
 
+func (c *client) getIsClosed() bool {
+	c.closeLock.Lock()
+	defer c.closeLock.Unlock()
+	return c.closed
+}
+
 // Close is used to cleanup the client
 func (c *client) Close() error {
 	c.closeLock.Lock()
@@ -326,7 +332,7 @@ func (c *client) recv(l *net.UDPConn, msgCh chan *dns.Msg) {
 		return
 	}
 	buf := make([]byte, 65536)
-	for !c.closed {
+	for !c.getIsClosed() {
 		n, err := l.Read(buf)
 		if err != nil {
 			log.Printf("[ERR] mdns: Failed to read packet: %v", err)
