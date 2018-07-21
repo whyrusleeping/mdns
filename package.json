@@ -6,14 +6,14 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmWchsfMt9Re1CQaiHqPQC1DrZ9bkpa6n229dRYkGyLXNh",
+      "hash": "QmZkSgPV2bDfyaa5K4zt2u25AXu5QAr3p7F4fvEnifDMbC",
       "name": "dns",
-      "version": "0.0.0"
+      "version": "0.2.0"
     },
     {
-      "hash": "QmTEmsyNnckEq8rEfALfdhLHjrEHGoSGFDrAYReuetn7MC",
+      "hash": "QmRvYNctevGUW52urgmoFZscT6buMKqhHezLUS64WepGWn",
       "name": "go-net",
-      "version": "0.0.0"
+      "version": "0.2.0"
     }
   ],
   "gxVersion": "0.8.0",
