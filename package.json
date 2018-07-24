@@ -6,9 +6,9 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmZkSgPV2bDfyaa5K4zt2u25AXu5QAr3p7F4fvEnifDMbC",
+      "hash": "QmV3bVtkAhSZqWncYGonUmsVcJcV6cpzWztsFwc3A9so5m",
       "name": "dns",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     {
       "hash": "QmRvYNctevGUW52urgmoFZscT6buMKqhHezLUS64WepGWn",
@@ -21,6 +21,6 @@
   "language": "go",
   "license": "",
   "name": "mdns",
-  "version": "0.1.2"
+  "version": "0.1.3"
 }
 
