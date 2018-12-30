@@ -1,6 +1,7 @@
 package mdns
 
 import (
+	"sync"
 	"testing"
 	"time"
 )
@@ -21,11 +22,16 @@ func TestServer_Lookup(t *testing.T) {
 	}
 	defer serv.Shutdown()
 
+	var mux sync.Mutex
 	entries := make(chan *ServiceEntry, 1)
 	found := false
 	go func() {
+		mux.Lock()
+		defer mux.Unlock()
 		select {
 		case e := <-entries:
+			e.ReadLock.Lock()
+			defer e.ReadLock.Unlock()
 			if e.Name != "hostname._foobar._tcp.local." {
 				t.Fatalf("bad: %v", e)
 			}
@@ -52,6 +58,8 @@ func TestServer_Lookup(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
+	mux.Lock()
+	defer mux.Unlock()
 	if !found {
 		t.Fatalf("record not found")
 	}

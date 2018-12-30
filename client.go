@@ -22,6 +22,8 @@ type ServiceEntry struct {
 	Info       string
 	InfoFields []string
 
+	ReadLock sync.Mutex
+
 	Addr net.IP // @Deprecated
 
 	hasTXT bool
@@ -257,27 +259,35 @@ func (c *client) query(params *QueryParam) error {
 
 					// Get the port
 					inp = ensureName(inprogress, rr.Hdr.Name)
+					inp.ReadLock.Lock()
 					inp.Host = rr.Target
 					inp.Port = int(rr.Port)
+					inp.ReadLock.Unlock()
 
 				case *dns.TXT:
 					// Pull out the txt
 					inp = ensureName(inprogress, rr.Hdr.Name)
+					inp.ReadLock.Lock()
 					inp.Info = strings.Join(rr.Txt, "|")
 					inp.InfoFields = rr.Txt
 					inp.hasTXT = true
+					inp.ReadLock.Unlock()
 
 				case *dns.A:
 					// Pull out the IP
 					inp = ensureName(inprogress, rr.Hdr.Name)
+					inp.ReadLock.Lock()
 					inp.Addr = rr.A // @Deprecated
 					inp.AddrV4 = rr.A
+					inp.ReadLock.Unlock()
 
 				case *dns.AAAA:
 					// Pull out the IP
 					inp = ensureName(inprogress, rr.Hdr.Name)
+					inp.ReadLock.Lock()
 					inp.Addr = rr.AAAA // @Deprecated
 					inp.AddrV6 = rr.AAAA
+					inp.ReadLock.Unlock()
 				}
 			}
 
