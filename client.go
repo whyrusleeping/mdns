@@ -300,11 +300,13 @@ func (c *client) query(params *QueryParam) error {
 				if inp.sent {
 					continue
 				}
+				inp.ReadLock.Lock()
 				inp.sent = true
 				select {
 				case params.Entries <- inp:
 				default:
 				}
+				inp.ReadLock.Unlock()
 			} else {
 				// Fire off a node specific query
 				m := new(dns.Msg)
