@@ -3,6 +3,7 @@ package mdns
 import (
 	"testing"
 	"time"
+	"sync/atomic"
 )
 
 func TestServer_StartStop(t *testing.T) {
@@ -22,7 +23,7 @@ func TestServer_Lookup(t *testing.T) {
 	defer serv.Shutdown()
 
 	entries := make(chan *ServiceEntry, 1)
-	found := false
+	var found uint32
 	go func() {
 		select {
 		case e := <-entries:
@@ -35,7 +36,7 @@ func TestServer_Lookup(t *testing.T) {
 			if e.Info != "Local web server" {
 				t.Fatalf("bad: %v", e)
 			}
-			found = true
+			atomic.AddUint32(&found, 1)
 
 		case <-time.After(80 * time.Millisecond):
 			t.Fatalf("timeout")
@@ -52,7 +53,7 @@ func TestServer_Lookup(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err: %v", err)
 	}
-	if !found {
+	if atomic.LoadUint32(&found) != 1 {
 		t.Fatalf("record not found")
 	}
 }
