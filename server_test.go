@@ -1,9 +1,9 @@
 package mdns
 
 import (
+	"sync/atomic"
 	"testing"
 	"time"
-	"sync/atomic"
 )
 
 func TestServer_StartStop(t *testing.T) {
