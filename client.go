@@ -162,7 +162,6 @@ func (c *client) Close() error {
 	}
 	c.closed = true
 
-	logf("[INFO] mdns: Closing client %v", *c)
 	close(c.closedCh)
 
 	if c.ipv4UnicastConn != nil {
